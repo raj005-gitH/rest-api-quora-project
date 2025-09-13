@@ -44,18 +44,34 @@ app.post("/posts", (req, res) => {
 app.get("/posts/:id", (req, res) => {
   const { id } = req.params;
   const post = posts.find((p) => p.id === id);
-  res.render("show.ejs", { post });
+
+  if (!post) {
+    return res.status(404).send("❌ Post not found");
+  }
+
+  res.render("show", { post });
 });
+
 
 app.get("/posts/:id/edit", (req, res) => {
   const { id } = req.params;
   const post = posts.find((p) => p.id === id);
-  res.render("edit.ejs", { post });
+
+  if (!post) {
+    return res.status(404).send("❌ Post not found");
+  }
+
+  res.render("edit", { post });
 });
 
 app.patch("/posts/:id", (req, res) => {
   const { id } = req.params;
   const post = posts.find((p) => p.id === id);
+  
+  if (!post) {
+    return res.status(404).send("❌ Post not found");
+  }
+
   post.content = req.body.content;
   res.redirect("/posts");
 });
